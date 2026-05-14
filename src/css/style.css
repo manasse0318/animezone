@@ -1,6 +1,52 @@
+:root{
+    --bg-color: #1a1a1a;
+    --surface-color: #2a2a2a;
+    --text-color: #ffffff;
+    --accent-color: blueviolet;
+}
 body{
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    background-color: blueviolet;
-    color: black;
+    background-color: var(--bg-color);
+    color: var(--text-color);
     margin: 0;
+}
+header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: var(--surface-color);
+}
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 2rem;
+  flex-wrap: wrap;
+}
+select {
+  background-color: var(--surface-color);
+  color: var(--text-color);
+  border: 1px solid var(--accent-color);
+  padding: 0.5rem;
+  border-radius: 4px;
+  font-family: inherit;
+}
+input[type="search"] {
+  background-color: var(--surface-color);
+  color: var(--text-color);
+  border: 1px solid var(--accent-color);
+  padding: 0.5rem;
+  border-radius: 4px;
+  font-family: inherit;
+}
+main {
+  padding: 2rem;
+}
+header a {
+  color: var(--text-color);
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--accent-color);
+  border-radius: 4px;
 }
