@@ -12,6 +12,45 @@
       <input type="search" placeholder="Search anime..." id="search-input"/>
       <a href="#favorites">Favorites</a>
     </header>
+    <main>
+      <label for="filter-genre">Genre:</label>
+      <select id="filter-genre">
+        <option value="">All genres</option>
+        <option value="action">Action</option>
+        <option value="adventure">Adventure</option>
+        <option value="drama">Drama</option>
+        <option value="horror">Horror</option>
+      </select>
+      
+      <label for="filter-type">Type:</label>
+      <select id="filter-type">
+        <option value="">All types</option>
+        <option value="tv-show">TV Show</option>
+        <option value="movie">Movie</option>
+        <option value="tv-short">TV-Short</option>
+        <option value="ova">OVA</option>
+        <option value="ona">ONA</option>
+        <option value="special">Special</option>
+      </select>
+
+      <label for="sort-anime">Sort by:</label>
+      <select id="sort-anime">
+        <option value="title">Title</option>
+        <option value="score">Score</option>
+        <option value="release-date">Release Date</option>
+        <option value="date-added">Date added</option>
+      </select>
+
+      <section id="anime-list">
+        <!-- anime cards will be added here by JavaScript -->
+      </section>
+
+      <section id="favorites">
+        <h2>Favorites</h2>
+        <!-- favorite anime cards will be added here by JavaScript -->
+      </section>
+
+    </main>
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>
