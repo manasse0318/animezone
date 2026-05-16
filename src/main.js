@@ -4,6 +4,24 @@ import "./css/style.css";
 console.log("AnimeZone is starting...");
 
 const API_URL = "https://api.jikan.moe/v4/top/anime";
+const animeListEl = document.querySelector("#anime-list");
+
+const renderAnime = (animeArray) => {
+  animeListEl.innerHTML = animeArray
+    .map(
+      (anime) => `
+      <article class="anime-card">
+        <img src="${anime.images.jpg.image_url}" alt="${anime.title}" />
+        <h3>${anime.title}</h3>
+        <p>⭐ ${anime.score ?? "N/A"}</p>
+        <p>📺 ${anime.episodes ?? "?"} eps</p>
+        <p>${anime.type ?? "Unknown"}</p>
+        <p>${anime.status ?? "Unknown"}</p>
+      </article>
+    `
+    )
+    .join("");
+};
 
 const fetchTopAnime = async () => {
   try {
@@ -17,4 +35,4 @@ const fetchTopAnime = async () => {
   }
 };
 
-fetchTopAnime();
+fetchTopAnime().then(renderAnime);
