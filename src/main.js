@@ -13,8 +13,8 @@ const renderAnime = (animeArray) => {
       <article class="anime-card">
         <img src="${anime.images.jpg.image_url}" alt="${anime.title}" />
         <h3>${anime.title}</h3>
-        <p>⭐ ${anime.score ?? "N/A"}</p>
-        <p>📺 ${anime.episodes ?? "?"} eps</p>
+        <p>Score: ${anime.score ?? "N/A"}</p>
+        <p>Episodes: ${anime.episodes ?? "?"}</p>
         <p>${anime.type ?? "Unknown"}</p>
         <p>${anime.status ?? "Unknown"}</p>
       </article>
@@ -27,6 +27,10 @@ const showLoading = () => {
   animeListEl.innerHTML = `<p class="loading">Loading anime...</p>`;
 };
 
+const showError = (message) => {
+  animeListEl.innerHTML = `<p class="eror">${message}</p>`;
+};
+
 const fetchTopAnime = async () => {
   try {
     showLoading();
@@ -37,6 +41,7 @@ const fetchTopAnime = async () => {
     return json.data;
   } catch (err) {
     console.error("Fetch failed:", err);
+    showError("Could not load anime. Please try again later.");
   }
 };
 
