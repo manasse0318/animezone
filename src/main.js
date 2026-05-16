@@ -23,8 +23,13 @@ const renderAnime = (animeArray) => {
     .join("");
 };
 
+const showLoading = () => {
+  animeListEl.innerHTML = `<p class="loading">Loading anime...</p>`;
+};
+
 const fetchTopAnime = async () => {
   try {
+    showLoading();
     const response = await fetch(API_URL);
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const json = await response.json();
