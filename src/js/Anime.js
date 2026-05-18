@@ -9,12 +9,12 @@ export class Anime{
         this.type = data.type;
         this.status = data.status;
         this.image = data.images.jpg.image_url;
-        this.syopsis = data.synopsis;
+        this.synopsis = data.synopsis;
     }
     get shortSynopsis(){
-        if (!this.syopsis) return "No synopsis available";
-        return this.syopsis.length > 120
-            ? this.syopsis.slice(0, 120) + "..."
-            : this.syopsis;
+        if (!this.synopsis) return "No synopsis available";
+        return this.synopsis.length > 120
+            ? this.synopsis.slice(0, 120) + "..."
+            : this.synopsis;
     }
 }

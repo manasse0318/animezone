@@ -1,4 +1,7 @@
 import "./css/style.css";
+import {Anime} from "./js/Anime.js";
+import {Helper} from "./js/Helper.js";
+
 "use strict";
 
 console.log("AnimeZone is starting...");
@@ -11,12 +14,13 @@ const renderAnime = (animeArray) => {
     .map(
       (anime) => `
       <article class="anime-card">
-        <img src="${anime.images.jpg.image_url}" alt="${anime.title}" />
+        <img src="${anime.image}" alt="${anime.title}" />
         <h3>${anime.title}</h3>
-        <p>Score: ${anime.score ?? "N/A"}</p>
+        <p>Score: ${Helper.formatScore(anime.score)}</p>
         <p>Episodes: ${anime.episodes ?? "?"}</p>
         <p>${anime.type ?? "Unknown"}</p>
         <p>${anime.status ?? "Unknown"}</p>
+        <p class="synopsis">${anime.shortSynopsis}</p>
       </article>
     `
     )
@@ -45,4 +49,7 @@ const fetchTopAnime = async () => {
   }
 };
 
-fetchTopAnime().then(renderAnime);
+fetchTopAnime().then((data) =>{
+  const animeInstances = data.map((item) => new Anime(item));
+  renderAnime(animeInstances);
+});
