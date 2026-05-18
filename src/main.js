@@ -8,6 +8,8 @@ console.log("AnimeZone is starting...");
 
 const API_URL = "https://api.jikan.moe/v4/top/anime";
 const animeListEl = document.querySelector("#anime-list");
+let allAnime = [];
+const searchInput = document.querySelector("#search-input");
 
 const renderAnime = (animeArray) => {
   animeListEl.innerHTML = animeArray
@@ -50,6 +52,13 @@ const fetchTopAnime = async () => {
 };
 
 fetchTopAnime().then((data) =>{
-  const animeInstances = data.map((item) => new Anime(item));
-  renderAnime(animeInstances);
+  allAnime = data.map((item) => new Anime(item));
+  renderAnime(allAnime);
+  searchInput.addEventListener("input", (e) => {
+    const query = e.target.value.toLowerCase();
+    const filtered = allAnime.filter((anime) =>
+      anime.title.toLowerCase().includes(query)
+    );
+    renderAnime(filtered);
+  })
 });
