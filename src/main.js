@@ -11,6 +11,7 @@ const animeListEl = document.querySelector("#anime-list");
 let allAnime = [];
 const searchInput = document.querySelector("#search-input");
 const sortSelect = document.querySelector("#sort-anime");
+const typeSelect = document.querySelector("#filter-type");
 
 const renderAnime = (animeArray) => {
   animeListEl.innerHTML = animeArray
@@ -51,7 +52,23 @@ const fetchTopAnime = async () => {
     showError("Could not load anime. Please try again later.");
   }
 };
+const applyFilters = () => {
+  const query = searchInput.value.toLowerCase();
+  const type = typeSelect.value;
+  const sortBy = sortSelect.value;
 
+  let result = allAnime.filter((anime) =>
+    anime.title.toLowerCase().includes(query)
+  );
+
+  result = type ? result.filter((anime) => anime.type === type) : result;
+
+  result = [...result].sort((a, b) =>
+    sortBy === "score" ? b.score - a.score : a.title.localeCompare(b.title)
+  );
+
+  renderAnime(result);
+};
 fetchTopAnime().then((data) =>{
   allAnime = data.map((item) => new Anime(item));
   renderAnime(allAnime);
