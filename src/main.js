@@ -10,6 +10,7 @@ const API_URL = "https://api.jikan.moe/v4/top/anime";
 const animeListEl = document.querySelector("#anime-list");
 let allAnime = [];
 const searchInput = document.querySelector("#search-input");
+const sortSelect = document.querySelector("#sort-anime");
 
 const renderAnime = (animeArray) => {
   animeListEl.innerHTML = animeArray
@@ -60,5 +61,12 @@ fetchTopAnime().then((data) =>{
       anime.title.toLowerCase().includes(query)
     );
     renderAnime(filtered);
-  })
+  });
+  sortSelect.addEventListener("change", (e) =>{
+    const sortBy = e.target.value;
+    const sorted = [...allAnime].sort((a,b) =>
+      sortBy === "score" ? b.score - a.score : a.title.localeCompare(b.title)
+    );
+    renderAnime(sorted);
+  });
 });
