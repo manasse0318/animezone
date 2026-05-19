@@ -10,6 +10,7 @@ export class Anime{
         this.status = data.status;
         this.image = data.images.jpg.image_url;
         this.synopsis = data.synopsis;
+        this.genres = data.genres ??[];
     }
     get shortSynopsis(){
         if (!this.synopsis) return "No synopsis available";

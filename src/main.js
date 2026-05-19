@@ -12,7 +12,7 @@ let allAnime = [];
 const searchInput = document.querySelector("#search-input");
 const sortSelect = document.querySelector("#sort-anime");
 const typeSelect = document.querySelector("#filter-type");
-const genreSelct = document.querySelector("#filter-genre");
+const genreSelect = document.querySelector("#filter-genre");
 
 const renderAnime = (animeArray) => {
   animeListEl.innerHTML = animeArray
@@ -68,6 +68,7 @@ const fetchGenres = async () =>{
 const applyFilters = () => {
   const query = searchInput.value.toLowerCase();
   const type = typeSelect.value;
+  const genre = genreSelect.value;
   const sortBy = sortSelect.value;
 
   let result = allAnime.filter((anime) =>
@@ -75,6 +76,10 @@ const applyFilters = () => {
   );
 
   result = type ? result.filter((anime) => anime.type === type) : result;
+
+  result = genre 
+    ? result.filter((anime) => anime.genres.some((g) => g.name === genre))
+    : result;
 
   result = [...result].sort((a, b) =>
     sortBy === "score" ? b.score - a.score : a.title.localeCompare(b.title)
@@ -89,9 +94,10 @@ fetchTopAnime().then((data) =>{
   searchInput.addEventListener("input", applyFilters);
   typeSelect.addEventListener("change", applyFilters);
   sortSelect.addEventListener("change", applyFilters);
+  genreSelect.addEventListener("change", applyFilters);
 
   fetchGenres().then((genres) =>{
-    genreSelct.innerHTML += genres
+    genreSelect.innerHTML += genres
       .map((g) => `<option value="${g.name}">${g.name}</option`)
       .join("");
   })
