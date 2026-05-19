@@ -72,18 +72,9 @@ const applyFilters = () => {
 fetchTopAnime().then((data) =>{
   allAnime = data.map((item) => new Anime(item));
   renderAnime(allAnime);
-  searchInput.addEventListener("input", (e) => {
-    const query = e.target.value.toLowerCase();
-    const filtered = allAnime.filter((anime) =>
-      anime.title.toLowerCase().includes(query)
-    );
-    renderAnime(filtered);
-  });
-  sortSelect.addEventListener("change", (e) =>{
-    const sortBy = e.target.value;
-    const sorted = [...allAnime].sort((a,b) =>
-      sortBy === "score" ? b.score - a.score : a.title.localeCompare(b.title)
-    );
-    renderAnime(sorted);
-  });
+  
+  searchInput.addEventListener("input", applyFilters);
+  typeSelect.addEventListener("change", applyFilters);
+  sortSelect.addEventListener("change", applyFilters);
+  
 });
