@@ -18,7 +18,8 @@ const renderAnime = (animeArray) => {
   animeListEl.innerHTML = animeArray
     .map(
       (anime) => `
-      <article class="anime-card">
+      <article class="anime-card" data-id="${anime.id}">
+        <button class="fav-btn" data-id="${anime.id}">♡</button>
         <img src="${anime.image}" alt="${anime.title}" />
         <h3>${anime.title}</h3>
         <p>Score: ${Helper.formatScore(anime.score)}</p>
