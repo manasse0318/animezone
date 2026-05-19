@@ -12,6 +12,7 @@ let allAnime = [];
 const searchInput = document.querySelector("#search-input");
 const sortSelect = document.querySelector("#sort-anime");
 const typeSelect = document.querySelector("#filter-type");
+const genreSelct = document.querySelector("#filter-genre");
 
 const renderAnime = (animeArray) => {
   animeListEl.innerHTML = animeArray
@@ -52,6 +53,18 @@ const fetchTopAnime = async () => {
     showError("Could not load anime. Please try again later.");
   }
 };
+const fetchGenres = async () =>{
+  try {
+    const response = await fetch("https://api.jikan.moe/v4/genres/anime");
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const json = await response.json();
+    return json.data;
+  } catch (err) {
+    console.error("Genre fetch failed:", err);
+    return [];
+  }
+
+}
 const applyFilters = () => {
   const query = searchInput.value.toLowerCase();
   const type = typeSelect.value;
@@ -76,5 +89,11 @@ fetchTopAnime().then((data) =>{
   searchInput.addEventListener("input", applyFilters);
   typeSelect.addEventListener("change", applyFilters);
   sortSelect.addEventListener("change", applyFilters);
+
+  fetchGenres().then((genres) =>{
+    genreSelct.innerHTML += genres
+      .map((g) => `<option value="${g.name}">${g.name}</option`)
+      .join("");
+  })
   
 });
