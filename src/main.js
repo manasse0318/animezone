@@ -9,6 +9,7 @@ console.log("AnimeZone is starting...");
 const API_URL = "https://api.jikan.moe/v4/top/anime";
 const animeListEl = document.querySelector("#anime-list");
 let allAnime = [];
+let favorites = JSON.parse(localStorage.getItem("favorites")) ?? [];
 const searchInput = document.querySelector("#search-input");
 const sortSelect = document.querySelector("#sort-anime");
 const typeSelect = document.querySelector("#filter-type");
@@ -102,5 +103,21 @@ fetchTopAnime().then((data) =>{
       .map((g) => `<option value="${g.name}">${g.name}</option`)
       .join("");
   })
+
+  animeListEl.addEventListener("click", (e) => {
+    if (!e.target.classList.contains("fav-btn")) return;
+    e.stopPropagation();
+
+    const id = Number(e.target.dataset.id);
+
+    if (favorites.includes(id)) {
+      favorites = favorites.filter((favId) => favId !== id);
+      e.target.textContent = "\u2661";
+    } else {
+      favorites.push(id);
+      e.target.textContent = "\u2665";
+    }
+    localStorage.setItem("favorites", JSON.stringify(favorites));
+  });
   
 });
