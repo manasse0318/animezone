@@ -20,7 +20,7 @@ const renderAnime = (animeArray) => {
     .map(
       (anime) => `
       <article class="anime-card" data-id="${anime.id}">
-        <button class="fav-btn" data-id="${anime.id}">♡</button>
+        <button class="fav-btn" data-id="${anime.id}">${favorites.includes(anime.id) ? "\u2665" : "\u2661"}</button>
         <img src="${anime.image}" alt="${anime.title}" />
         <h3>${anime.title}</h3>
         <p>Score: ${Helper.formatScore(anime.score)}</p>
