@@ -93,18 +93,39 @@ const applyFilters = () => {
   renderAnime(result);
 };
 
-const openModal = (id) =>{
-  const anime = allAnime.find((a) => a.id === id);
-  if (!anime) return;
+const fetchAnimeDetails = async (id) => {
+  try {
+    const response = await fetch(`https://api.jikan.moe/v4/anime/${id}`);
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const json = await response.json();
+    return json.data;
+  } catch (err) {
+    console.error("Details fetch failed:", err);
+    return null;
+  }
+};
+
+const openModal = async (id) => {
+  modalBodyEl.innerHTML = `<p class="loading">Loading details...</p>`;
+  modalEl.classList.remove("hidden");
+
+  const details = await fetchAnimeDetails(id);
+  if (!details) {
+    modalBodyEl.innerHTML = `<p class="error">Could not load details.</p>`;
+    return;
+  }
 
   modalBodyEl.innerHTML = `
-    <h2>${anime.title}</h2>
-    <img src="${anime.image}" alt="${anime.title}" />
-    <p>Score: ${Helper.formatScore(anime.score)}</p>
-    <p>Episodes: ${anime.episodes ?? "?"}</p>
-    <p>${anime.synopsis ?? "No synopsis"}</p>
+    <h2>${details.title}</h2>
+    <img src="${details.images.jpg.image_url}" alt="${details.title}" />
+    <p>Score: ${Helper.formatScore(details.score)}</p>
+    <p>Rank: #${details.rank ?? "?"}</p>
+    <p>Episodes: ${details.episodes ?? "?"}</p>
+    <p>Year: ${details.year ?? "Unknown"}</p>
+    <p>Duration: ${details.duration ?? "?"}</p>
+    <p>Rating: ${details.rating ?? "?"}</p>
+    <p>${details.synopsis ?? "No synopsis"}</p>
   `;
-  modalEl.classList.remove("hidden");
 };
 
 fetchTopAnime().then((data) =>{
