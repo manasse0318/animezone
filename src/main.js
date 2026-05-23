@@ -202,5 +202,11 @@ fetchTopAnime().then((data) =>{
   modalCloseEl.addEventListener("click", () => {
     modalEl.classList.add("hidden");
   });
+
+  window.addEventListener("keydown", (e) =>{
+    if (e.key === "Escape") {
+      modalEl.classList.add("hidden");
+    }
+  });
   
 });
