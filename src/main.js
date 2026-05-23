@@ -105,15 +105,33 @@ const fetchAnimeDetails = async (id) => {
   }
 };
 
+const fetchCharacters = async (id) => {
+  try {
+    const response = await fetch(`https://api.jikan.moe/v4/anime/${id}/characters`);
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const json = await response.json();
+    return json.data;
+  } catch (err) {
+    console.error("Characters fetch failed:", err);
+    return [];
+  }
+};
+
 const openModal = async (id) => {
   modalBodyEl.innerHTML = `<p class="loading">Loading details...</p>`;
   modalEl.classList.remove("hidden");
 
-  const details = await fetchAnimeDetails(id);
+  const [details, characters] = await Promise.all([
+    fetchAnimeDetails(id),
+    fetchCharacters(id),
+  ]);
+  
   if (!details) {
     modalBodyEl.innerHTML = `<p class="error">Could not load details.</p>`;
     return;
   }
+
+  const topCharacters = characters.slice(0, 6);
 
   modalBodyEl.innerHTML = `
     <h2>${details.title}</h2>
@@ -125,6 +143,20 @@ const openModal = async (id) => {
     <p>Duration: ${details.duration ?? "?"}</p>
     <p>Rating: ${details.rating ?? "?"}</p>
     <p>${details.synopsis ?? "No synopsis"}</p>
+    <h3>Characters</h3>
+    <div class="characters">
+      ${topCharacters
+        .map(
+          (c) => `
+        <div class="character">
+          <img src="${c.character.images.jpg.image_url}" alt="${c.character.name}" />
+          <p>${c.character.name}</p>
+          <small>${c.role}</small>
+        </div>
+      `
+        )
+        .join("")}
+    </div>
   `;
 };
 
