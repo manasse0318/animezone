@@ -14,6 +14,9 @@ const searchInput = document.querySelector("#search-input");
 const sortSelect = document.querySelector("#sort-anime");
 const typeSelect = document.querySelector("#filter-type");
 const genreSelect = document.querySelector("#filter-genre");
+const modalEl = document.querySelector("#modal");
+const modalBodyEl = document.querySelector("#modal-body");
+const modalCloseEl = document.querySelector("#modal-close");
 
 const renderAnime = (animeArray) => {
   animeListEl.innerHTML = animeArray
@@ -89,6 +92,21 @@ const applyFilters = () => {
 
   renderAnime(result);
 };
+
+const openModal = (id) =>{
+  const anime = allAnime.find((a) => a.id === id);
+  if (!anime) return;
+
+  modalBodyEl.innerHTML = `
+    <h2>${anime.title}</h2>
+    <img src="${anime.image}" alt="${anime.title}" />
+    <p>Score: ${Helper.formatScore(anime.score)}</p>
+    <p>Episodes: ${anime.episodes ?? "?"}</p>
+    <p>${anime.synopsis ?? "No synopsis"}</p>
+  `;
+  modalEl.classList.remove("hidden");
+};
+
 fetchTopAnime().then((data) =>{
   allAnime = data.map((item) => new Anime(item));
   renderAnime(allAnime);
@@ -100,7 +118,7 @@ fetchTopAnime().then((data) =>{
 
   fetchGenres().then((genres) =>{
     genreSelect.innerHTML += genres
-      .map((g) => `<option value="${g.name}">${g.name}</option`)
+      .map((g) => `<option value="${g.name}">${g.name}</option>`)
       .join("");
   })
 
@@ -118,6 +136,18 @@ fetchTopAnime().then((data) =>{
       e.target.textContent = "\u2665";
     }
     localStorage.setItem("favorites", JSON.stringify(favorites));
+  });
+
+  animeListEl.addEventListener("click", (e) =>{
+    const card = e.target.closest(".anime-card");
+    if (!card) return;
+    if (e.target.classList.contains("fav-btn")) return;
+
+    const id = Number(card.dataset.id);
+    openModal(id);
+  });
+  modalCloseEl.addEventListener("click", () => {
+    modalEl.classList.add("hidden");
   });
   
 });
