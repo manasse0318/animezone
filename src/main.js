@@ -6,7 +6,6 @@ import {Helper} from "./js/Helper.js";
 
 console.log("AnimeZone is starting...");
 
-const API_URL = "https://api.jikan.moe/v4/top/anime";
 const animeListEl = document.querySelector("#anime-list");
 let allAnime = [];
 let favorites = JSON.parse(localStorage.getItem("favorites")) ?? [];
@@ -48,16 +47,25 @@ const showError = (message) => {
 const fetchTopAnime = async () => {
   try {
     showLoading();
-    const response = await fetch(API_URL);
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    const json = await response.json();
-    console.log("Jikan response:", json.data);
-    return json.data;
+    const allData = [];
+    // Fetch 4 pages sequentially with delay to respect Jikan rate limit
+    for (const page of [1, 2, 3, 4]) {
+      const response = await fetch(
+        `https://api.jikan.moe/v4/top/anime?page=${page}`
+      );
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const json = await response.json();
+      allData.push(...json.data);
+      // Small delay between requests to avoid rate limiting
+      await new Promise((resolve) => setTimeout(resolve, 400));
+    }
+    return allData;
   } catch (err) {
     console.error("Fetch failed:", err);
     showError("Could not load anime. Please try again later.");
   }
 };
+
 const fetchGenres = async () =>{
   try {
     const response = await fetch("https://api.jikan.moe/v4/genres/anime");
@@ -70,6 +78,7 @@ const fetchGenres = async () =>{
   }
 
 }
+
 const applyFilters = () => {
   const query = searchInput.value.toLowerCase();
   const type = typeSelect.value;
