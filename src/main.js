@@ -16,6 +16,7 @@ const genreSelect = document.querySelector("#filter-genre");
 const modalEl = document.querySelector("#modal");
 const modalBodyEl = document.querySelector("#modal-body");
 const modalCloseEl = document.querySelector("#modal-close");
+const favoritesListEl = document.querySelector("#favorites-list");
 
 const renderAnime = (animeArray) => {
   animeListEl.innerHTML = animeArray
@@ -30,6 +31,27 @@ const renderAnime = (animeArray) => {
         <p>${anime.type ?? "Unknown"}</p>
         <p>${anime.status ?? "Unknown"}</p>
         <p class="synopsis">${anime.shortSynopsis}</p>
+      </article>
+    `
+    )
+    .join("");
+};
+
+const renderFavorites = () => {
+  const favAnime = allAnime.filter((anime) => favorites.includes(anime.id));
+
+  if (favAnime.length === 0) {
+    favoritesListEl.innerHTML = `<p class="empty">No favorites yet.</p>`;
+    return;
+  }
+
+  favoritesListEl.innerHTML = favAnime
+    .map(
+      (anime) => `
+      <article class="fav-card" data-id="${anime.id}">
+        <img src="${anime.image}" alt="${anime.title}" />
+        <h4>${anime.title}</h4>
+        <p>Score: ${Helper.formatScore(anime.score)}</p>
       </article>
     `
     )
@@ -62,7 +84,7 @@ const fetchTopAnime = async () => {
     return allData;
   } catch (err) {
     console.error("Fetch failed:", err);
-    showError("Could not load anime. Please try again later.");
+    showError("Could not load animes. Please try again later.");
   }
 };
 
@@ -172,6 +194,7 @@ const openModal = async (id) => {
 fetchTopAnime().then((data) =>{
   allAnime = data.map((item) => new Anime(item));
   renderAnime(allAnime);
+  renderFavorites();
   
   searchInput.addEventListener("input", applyFilters);
   typeSelect.addEventListener("change", applyFilters);
@@ -198,6 +221,7 @@ fetchTopAnime().then((data) =>{
       e.target.textContent = "\u2665";
     }
     localStorage.setItem("favorites", JSON.stringify(favorites));
+    renderFavorites();
   });
 
   animeListEl.addEventListener("click", (e) =>{
