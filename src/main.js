@@ -18,6 +18,8 @@ const modalBodyEl = document.querySelector("#modal-body");
 const modalCloseEl = document.querySelector("#modal-close");
 const favoritesListEl = document.querySelector("#favorites-list");
 const themeToggleEl = document.querySelector("#theme-toggle");
+const searchFormEl = document.querySelector("#search-form");
+const searchErrorEl = document.querySelector("#search-error");
 
 const renderAnime = (animeArray) => {
   animeListEl.innerHTML = animeArray
@@ -261,6 +263,21 @@ fetchTopAnime().then((data) =>{
     if (e.key === "Escape") {
       modalEl.classList.add("hidden");
     }
+  });
+
+  searchFormEl.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const value = searchInput.value.trim();
+
+    if (value.length < 2) {
+      searchErrorEl.textContent = "Please enter at least 2 characters.";
+      searchInput.classList.add("invalid");
+      return;
+    }
+
+    searchErrorEl.textContent = "";
+    searchInput.classList.remove("invalid");
+    applyFilters();
   });
 });
 const savedTheme = localStorage.getItem("theme") ?? "dark";

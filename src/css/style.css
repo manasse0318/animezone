@@ -148,3 +148,16 @@ header a, #theme-toggle {
 .fav-card img.lazy {
   opacity: 0;
 }
+.search-error {
+  color: #ff5555;
+  font-size: 0.85rem;
+  margin-left: 0.5rem;
+}
+input.invalid {
+  border-color: #ff5555;
+}
+#search-form {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
