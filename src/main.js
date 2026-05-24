@@ -17,6 +17,7 @@ const modalEl = document.querySelector("#modal");
 const modalBodyEl = document.querySelector("#modal-body");
 const modalCloseEl = document.querySelector("#modal-close");
 const favoritesListEl = document.querySelector("#favorites-list");
+const themeToggleEl = document.querySelector("#theme-toggle");
 
 const renderAnime = (animeArray) => {
   animeListEl.innerHTML = animeArray
@@ -261,5 +262,16 @@ fetchTopAnime().then((data) =>{
       modalEl.classList.add("hidden");
     }
   });
-  
+});
+const savedTheme = localStorage.getItem("theme") ?? "dark";
+if (savedTheme === "light") {
+  document.body.classList.add("light-mode");
+  themeToggleEl.textContent = "Dark mode";
+}
+
+themeToggleEl.addEventListener("click", () => {
+  document.body.classList.toggle("light-mode");
+  const isLight = document.body.classList.contains("light-mode");
+  themeToggleEl.textContent = isLight ? "Dark mode" : "Light mode";
+  localStorage.setItem("theme", isLight ? "light" : "dark");
 });
