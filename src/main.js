@@ -20,6 +20,7 @@ const favoritesListEl = document.querySelector("#favorites-list");
 const themeToggleEl = document.querySelector("#theme-toggle");
 const searchFormEl = document.querySelector("#search-form");
 const searchErrorEl = document.querySelector("#search-error");
+const backToTopEl = document.querySelector("#back-to-top");
 
 const renderAnime = (animeArray) => {
   animeListEl.innerHTML = animeArray
@@ -291,4 +292,16 @@ themeToggleEl.addEventListener("click", () => {
   const isLight = document.body.classList.contains("light-mode");
   themeToggleEl.textContent = isLight ? "Dark mode" : "Light mode";
   localStorage.setItem("theme", isLight ? "light" : "dark");
+});
+
+window.addEventListener("scroll", () => {
+  if (window.scrollY > 300) {
+    backToTopEl.classList.remove("hidden");
+  } else {
+    backToTopEl.classList.add("hidden");
+  }
+});
+
+backToTopEl.addEventListener("click", () => {
+  window.scrollTo({ top: 0, behavior: "smooth" });
 });
