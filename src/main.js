@@ -24,7 +24,7 @@ const renderAnime = (animeArray) => {
       (anime) => `
       <article class="anime-card" data-id="${anime.id}">
         <button class="fav-btn" data-id="${anime.id}">${favorites.includes(anime.id) ? "\u2665" : "\u2661"}</button>
-        <img src="${anime.image}" alt="${anime.title}" />
+        <img data-src="${anime.image}" alt="${anime.title}" class="lazy" />
         <h3>${anime.title}</h3>
         <p>Score: ${Helper.formatScore(anime.score)}</p>
         <p>Episodes: ${anime.episodes ?? "?"}</p>
@@ -35,6 +35,7 @@ const renderAnime = (animeArray) => {
     `
     )
     .join("");
+    lazyLoadImages();
 };
 
 const renderFavorites = () => {
@@ -49,13 +50,32 @@ const renderFavorites = () => {
     .map(
       (anime) => `
       <article class="fav-card" data-id="${anime.id}">
-        <img src="${anime.image}" alt="${anime.title}" />
+        <img data-src="${anime.image}" alt="${anime.title}" class="lazy" />
         <h4>${anime.title}</h4>
         <p>Score: ${Helper.formatScore(anime.score)}</p>
       </article>
     `
     )
     .join("");
+    lazyLoadImages();
+};
+
+// IntersectionObserver loads images only when they scroll into view
+const lazyLoadImages = () => {
+  const lazyImages = document.querySelectorAll("img.lazy");
+
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const img = entry.target;
+        img.src = img.dataset.src;
+        img.classList.remove("lazy");
+        obs.unobserve(img);
+      }
+    });
+  });
+
+  lazyImages.forEach((img) => observer.observe(img));
 };
 
 const showLoading = () => {
