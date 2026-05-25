@@ -65,11 +65,11 @@ animezone/
 
 ## Screenshots
 
-![alt text](image.png)
-![alt text](image-1.png)
-![alt text](image-2.png)
-![alt text](image-3.png)
-![alt text](image-4.png)
+![Screenshot](screenshots/image.png)
+![Screenshot](screenshots/image-1.png)
+![Screenshot](screenshots/image-2.png)
+![Screenshot](screenshots/image-3.png)
+![Screenshot](screenshots/image-4.png)
 
 ## Technical requirements mapping
 
